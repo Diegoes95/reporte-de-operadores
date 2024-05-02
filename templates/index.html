@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+
+</head>
+<body>
+
+    <h1 class="text-center mt-5 mb-5 text-primary">Reporte de operadores</h1>
+
+    <div class="container">
+        <div class="card shadow">
+            <div class="card-body">
+                <form action="/user" method="POST">
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label>cruce_1</label>
+                            <input type="text" class="form-control mb-3" name="cruce_1">
+                        </div>
+                        <div class="col">
+                            <label>cruce_2</label>
+                            <input type="text" class="form-control mb-3" name="cruce_2">
+                        </div>
+                        <div class="col">
+                            <label>evento</label>
+                            <select class = "form-select" aria-label="Default select example" name  = "evento">
+                                <option value="">Seleccionar evento</option>
+                                <option value="Accidente-Automovilístico">Accidente-Automovilístico</option>
+                                <option value="Accidente-motociclístico">Accidente-motociclístico</option>
+                                <option value="Accidente">Accidente</option>
+                                <option value="Vehículo detenido">Vehículo detenido</option>
+                                <option value="Bloqueo temporal">Bloqueo temporal</option>
+                                <option value="Falla de semáforo-Un. Semáforos">Falla de semáforo-Un. Semáforos</option>
+                                <option value="Falla de energia">Falla de energia</option>
+                                <option value="Falla de semáforo-ATMS">Falla de semáforo-ATMS</option>
+
+                                <option value="Peligro en el camino">Peligro en el camino</option>
+                                <option value="Trafico pesado">Trafico pesado</option>
+                                <option value="Trafico inusual por bloqueo">Trafico inusual por bloqueo</option>
+                                <option value="Trafico inusual por obras">Trafico inusual por obras</option>
+                                <option value="Obras en general">Obras en general</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label>reportado_via</label>
+                            <input type="text" class="form-select" name="reportado_via">
+                        </div>
+                        <div class="row">
+                            <label>operador</label>
+                            <select class = "form-select" aria-label="Default select example" name  = "operador">
+                                <option value="">Seleccionar operador</option>
+                                <option value="Gustavo González">Gustavo González</option>
+                                <option value="Ricardo Amarilla">Ricardo Amarilla</option>
+                                <option value="Diego Escobar">Diego Escobar</option>
+                                <option value="Adán Rodas">Adán Rodas</option>
+                                <option value="César Franco">César Franco</option>
+                            </select>
+                        
+                        </div>
+                        <div class="col">
+                            <label>derivado_a</label>
+                            <input type="text" class="form-control mb-3" name="derivado_a">
+                        </div>
+                        <div class="col">
+                            <label>fecha</label>
+                            <input type="date" class="form-control mb-3" name="fecha">
+                        </div>
+                        <div class="col">
+                            <label>hora</label>
+                            <input type="time" class="form-control mb-3" name="hora">
+                        </div>
+                        <div class="col">
+                            <button class="btn btn-primary mb-3 mt-4" type="submit">Save</button>
+                        </div>
+                    </div>
+
+                </form>
+
+
+                <!-- Tabla -->
+
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">cruce_1</th>
+                            <th scope="col">cruce_2</th>
+                            <th scope="col">evento</th>
+                            <th scope="col">reportado_via</th>
+                            <th scope="col">operador</th>
+                            <th scope="col">derivado_a</th>
+                            <th scope="col">fecha</th>
+                            <th scope="col">hora</th>
+                            <th scope="col">Edit</th>
+                            <th scope="col">Delete</th>
+                        </tr>
+                    </thead>
+                
+                <tbody>
+                    {% for d in data %}
+                        <tr>
+                            <td>{{d.id}}</td>
+                            <td>{{d.cruce_1}}</td>
+                            <td>{{d.cruce_2}}</td>
+                            <td>{{d.evento}}</td>
+                            <td>{{d.reportado_via}}</td>
+                            <td>{{d.operador}}</td>
+                            <td>{{d.derivado_a}}</td>
+                            <td>{{d.fecha}}</td>
+                            <td>{{d.hora}}</td>
+                            <td><button class="btn btn-primary btn-sm" id="btn-edit{{d.id}}" data-bs-toggle="modal" data-bs-target="#modal{{d.id}}">Edit</button></td>
+                            <td><a href="{{url_for('delete', id=d.id)}}" class="btn btn-danger btn-sm">Delete</a></td>
+                        </tr>
+
+                        <!-- modal -->
+
+                        <div class="modal fade" id="modal{{d.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h1 class="modal-title fs-5" id="exampleModalLabel">{{d.cruce_1}}</h1>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="/edit/{{d.id}}" method="post">
+                                        <label>cruce_1</label>
+                                        <input type="text" class="form-control mb-3" name="cruce_1" value="{{d.cruce_1}}">
+                                        <label>cruce_2</label>
+                                        <input type="text" class="form-control mb-3" name="cruce_2" value="{{d.cruce_2}}">
+                                        <label>evento</label>
+                                        <input type="text" class="form-control mb-3" name="evento" value="{{d.evento}}">
+                                        <label>reportado_via</label>
+                                        <input type="text" class="form-control mb-3" name="reportado_via" value="{{d.reportado_via}}">
+                                        <label>operador</label>
+                                        <input type="text" class="form-control mb-3" name="operador" value="{{d.operador}}">
+                                        <label>derivado_a</label>
+                                        <input type="text" class="form-control mb-3" name="derivado_a" value="{{d.derivado_a}}">
+                                        <label>fecha</label>
+                                        <input type="date" class="form-control mb-3" name="fecha" value="{{d.fecha}}">
+                                        <label>hora</label>
+                                        <input type="time" class="form-control mb-3" name="hora" value="{{d.hora}}">
+
+                                  
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="submit" class="btn btn-primary">Save changes</button>
+                                </div>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+
+
+
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>
